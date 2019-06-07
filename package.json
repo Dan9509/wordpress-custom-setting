@@ -1,0 +1,19 @@
+{
+  "name": "wp_develop_space",
+  "version": "1.0.0",
+  "description": "sanghyeon 개발환경 기초 셋팅",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "TEST"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dan9509/wp_develop_space.git"
+  },
+  "author": "Dan9509",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dan9509/wp_develop_space/issues"
+  },
+  "homepage": "https://github.com/Dan9509/wp_develop_space#readme"
+}
