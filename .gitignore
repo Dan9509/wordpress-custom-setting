@@ -4,6 +4,7 @@ screenlog.*
 #
 *.bak
 *.log
+package-lock.json
 
 # Folder
 secret/
