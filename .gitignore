@@ -6,7 +6,5 @@ screenlog.*
 *.log
 
 # Folder
-code/secret/
-code/node_modules/
-bak/
-public/
+secret/
+node_modules/
