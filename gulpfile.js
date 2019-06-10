@@ -26,7 +26,7 @@ const   slack = {
 // 통합 scss
 function sass_integrated(){
     return gulp
-        .src('./Scss/mix/style.min.scss')
+        .src('./Scss/mix/style.min.dev.scss')
         .pipe(sourcemaps.init())
         .pipe(
             sass({ outputStyle: 'compressed' })
@@ -88,12 +88,12 @@ function typescript(){
 // Crossbrowser
 function cross_browser(){
     return gulp
-        .src('../public/css/style.min.css')
+        .src('../public/css/style.min.dev.css')
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(rename('style.min.prefix.css'))
+        .pipe(rename('style.min.css'))
         .pipe(gulp.dest('../public/css/'));
 }
 
