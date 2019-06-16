@@ -1,8 +1,28 @@
+/**************************
+
+    대체하고 삭제영역
+
+    ##PROJECT_NAME##
+
+    // slack upload
+    ##WEBHOOK_URL##
+    ##CDN_URL##
+
+    // S3
+    ##BUCKET_NAME##
+    ##ACCESSKEYID##
+    ##SECRETACCESSKEY##
+
+***************************/
+
 // gulpfile.js
-const   gulp = require('gulp');
+const gulp = require('gulp');
 
 // 프로젝트명
-const project = '#project_name';
+const PROJECT = '##PROJECT_NAME##';
+
+// cdn url
+var CDN_URL = '##CDN_URL##';
 
 // gulp plugin
 const   sass 			= require('gulp-sass'),
@@ -14,24 +34,39 @@ const   sass 			= require('gulp-sass'),
         rename 			= require('gulp-rename');
 
 // gulp notice plugin Slack
-const   slack = {
-    sass : require('gulp-slack')({
-        url: '##slack_web_hook_url##',
-        channel: '',    	// Optional
-        user: 'Sass',       // Optional
-        icon_url: '',   	// Optional
-    })
+// webhook url list
+const slack_dataset = {
+    'space' : [
+        '##WEBHOOK_URL##'
+    ],
+    // vscode       : https://github.com/vscode-icons/vscode-icons/tree/master/icons
+    // meterial     : https://github.com/PKief/vscode-material-icon-theme/tree/master/icons
+    'icon_url' : {
+        'sass' : CDN_URL+'/icons/sass.png',
+        'babel' : CDN_URL+'/icon/babel.png'
+    }
 }
+function slack_notice(user, channel, url, icon_url){
+    var slack = require('gulp-slack')({
+        url : url,
+        channel : channel,
+        user : user,
+        icon_url : icon_url
+    });
+
+    return slack;
+}
+
 // gulp s3 upload
 const   publisher = awspublish.create(
     {
         // 해당지역코드 서울 : 'ap-northeast-2'
         region: 'ap-northeast-2', 
         params: {
-            Bucket: '#BUCKET_NAME'
+            Bucket: '##BUCKET_NAME##'
         },
-        "accessKeyId": "#ACCESSKEYID",
-        "secretAccessKey": "#SECRETACCESSKEY"
+        "accessKeyId": "##ACCESSKEYID##",
+        "secretAccessKey": "##SECRETACCESSKEY##"
     },
     // TODO: 알아봐야하는 옵션
     // 정확하게 몰라서 적용하지 않음
@@ -56,9 +91,9 @@ function sass_integrated(){
             sass({ outputStyle: 'compressed' })
             .on(
                 'error', function (err) {
-                    slack.sass([
+                    slack_notice('Sass', '', slack_dataset.space, slack_dataset.icon_url.sass)([
                         {
-                            'text' : project ,
+                            'text' : PROJECT ,
                             'color': '#da1836',
                             'fields': [
                                 {
@@ -98,7 +133,7 @@ function sass_container(){
             sass({ outputStyle: 'compressed' })
             .on(
                 'error', function (err) {
-                    slack.sass([
+                    slack_notice('Sass', '', slack_dataset.space, slack_dataset.icon_url.sass)([
                         {
                             'text' : project ,
                             'color': '#da1836',
