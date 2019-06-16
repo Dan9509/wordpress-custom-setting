@@ -36,14 +36,13 @@ const   sass 			= require('gulp-sass'),
 // gulp notice plugin Slack
 // webhook url list
 const slack_dataset = {
-    'space' : [
-        '##WEBHOOK_URL##'
-    ],
+    'space' : '##WEBHOOK_URL##',
     // vscode       : https://github.com/vscode-icons/vscode-icons/tree/master/icons
     // meterial     : https://github.com/PKief/vscode-material-icon-theme/tree/master/icons
     'icon_url' : {
         'sass' : CDN_URL+'/icons/sass.png',
-        'babel' : CDN_URL+'/icon/babel.png'
+        'babel' : CDN_URL+'/icons/babel.png',
+        'typescript' : CDN_URL+'/icons/typescript.png'
     }
 }
 function slack_notice(user, channel, url, icon_url){
@@ -94,7 +93,7 @@ function sass_integrated(){
                     slack_notice('Sass', '', slack_dataset.space, slack_dataset.icon_url.sass)([
                         {
                             'text' : PROJECT ,
-                            'color': '#da1836',
+                            'color': '#ec407a',
                             'fields': [
                                 {
                                     'title': '에러발생 | mix',
@@ -135,8 +134,8 @@ function sass_container(){
                 'error', function (err) {
                     slack_notice('Sass', '', slack_dataset.space, slack_dataset.icon_url.sass)([
                         {
-                            'text' : project ,
-                            'color': '#da1836',
+                            'text' : PROJECT ,
+                            'color': '#ec407a',
                             'fields': [
                                 {
                                     'title': '에러발생 | single',
@@ -156,7 +155,7 @@ function sass_container(){
         .pipe(gulp.dest('../public/css/'))
         // s3upload
         .pipe(rename(function(path){
-            path.dirname = project + '/css/' + path.dirname;
+            path.dirname = PROJECT + '/css/' + path.dirname;
         }))
         .pipe(publisher.publish(headers))
         // .pipe(publisher.cache())
@@ -168,12 +167,32 @@ function babel(){
     return gulp
         .src('./Babel/*.js')
         .pipe(sourcemaps.init())
-        .pipe(bb())
+        .pipe(
+            bb()
+            .on(
+                'error', function(err){
+                    slack_notice('Babel', '', slack_dataset.space, slack_dataset.icon_url.babel)([
+                        {
+                            'text' : PROJECT ,
+                            'color': '#fdd835',
+                            'fields': [
+                                {
+                                    'title': '에러발생 | Babel',
+                                    'value': err.message.toString()
+                                }
+                            ]
+                        }
+                    ]);
+                    console.log(err.message.toString());
+                    this.emit('end');
+                }
+            )
+        )
         .pipe(sourcemaps.write('/map/',{sourcRoot: '.'}))
         .pipe(gulp.dest('../public/js/'))
         // s3upload
         .pipe(rename(function(path){
-            path.dirname = project + '/js/' + path.dirname;
+            path.dirname = PROJECT + '/js/' + path.dirname;
         }))
         .pipe(publisher.publish(headers))
         // .pipe(publisher.cache())
@@ -185,12 +204,32 @@ function typescript(){
     return gulp
 		.src('./TypeScript/*.ts')
 		.pipe(sourcemaps.init())
-		.pipe(ts())
+        .pipe(
+            ts()
+            .on(
+                'error', function(err){
+                    slack_notice('Typescript', '', slack_dataset.space, slack_dataset.icon_url.typescript)([
+                        {
+                            'text' : PROJECT ,
+                            'color': '#0288d1',
+                            'fields': [
+                                {
+                                    'title': '에러발생 | Typescript',
+                                    'value': err.message.toString()
+                                }
+                            ]
+                        }
+                    ]);
+                    console.log(err.message.toString());
+                    this.emit('end');
+                }
+            )
+        )
 		.pipe(sourcemaps.write('/map/',{sourcRoot: '.'}))
         .pipe(gulp.dest('../public/js/'))
         // s3upload
         .pipe(rename(function(path){
-            path.dirname = project + '/js/' + path.dirname;
+            path.dirname = PROJECT + '/js/' + path.dirname;
         }))
         .pipe(publisher.publish(headers))
         // .pipe(publisher.cache())
@@ -209,7 +248,7 @@ function cross_browser(){
         .pipe(gulp.dest('../public/css/'))
         // s3upload
         .pipe(rename(function(path){
-            path.dirname = project + '/css/' + path.dirname;
+            path.dirname = PROJECT + '/css/' + path.dirname;
         }))
         .pipe(publisher.publish(headers))
         // .pipe(publisher.cache())
