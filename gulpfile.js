@@ -2,16 +2,11 @@
 
     대체하고 삭제영역
 
-    ##PROJECT_NAME##
+    __PROJECT_NAME__
 
     // slack upload
-    ##WEBHOOK_URL##
-    ##CDN_URL##
-
-    // S3
-    ##BUCKET_NAME##
-    ##ACCESSKEYID##
-    ##SECRETACCESSKEY##
+    __WEBHOOK_URL__
+    __CDN_URL__
 
 ***************************/
 
@@ -19,10 +14,10 @@
 const gulp = require('gulp');
 
 // 프로젝트명
-const PROJECT = '##PROJECT_NAME##';
+const PROJECT = '__PROJECT_NAME__';
 
 // cdn url
-var CDN_URL = '##CDN_URL##';
+var CDN_URL = '__CDN_URL__';
 
 // gulp plugin
 const   sass 			= require('gulp-sass'),
@@ -34,10 +29,13 @@ const   sass 			= require('gulp-sass'),
         awspublish      = require('gulp-awspublish'),
         rename 			= require('gulp-rename');
 
+// dev import
+const   key             = require('./secret/key.js');
+
 // gulp notice plugin Slack
 // webhook url list
 const slack_dataset = {
-    'space' : '##WEBHOOK_URL##',
+    'space' : '__WEBHOOK_URL__',
     // vscode       : https://github.com/vscode-icons/vscode-icons/tree/master/icons
     // meterial     : https://github.com/PKief/vscode-material-icon-theme/tree/master/icons
     'icon_url' : {
@@ -57,16 +55,15 @@ function slack_notice(user, channel, url, icon_url){
     return slack;
 }
 
-// gulp s3 upload
-const   publisher = awspublish.create(
+var publisher = awspublish.create(
     {
         // 해당지역코드 서울 : 'ap-northeast-2'
         region: 'ap-northeast-2', 
         params: {
-            Bucket: '##BUCKET_NAME##'
+            Bucket: key.BUCKET.NAME
         },
-        "accessKeyId": "##ACCESSKEYID##",
-        "secretAccessKey": "##SECRETACCESSKEY##"
+        "accessKeyId": key.BUCKET.ACCESSKEYID,
+        "secretAccessKey": key.BUCKET.SECRETACCESSKEY
     },
     // TODO: 알아봐야하는 옵션
     // 정확하게 몰라서 적용하지 않음
@@ -74,15 +71,29 @@ const   publisher = awspublish.create(
     //     cacheFileName: "your-cache-location"
     // }
 )
-var headers = {
-    "Cache-Control": "max-age=315360000, no-transform, public"
+
+// make reusable pipeline
+// s3 upload function
+function s3_upload(inputStream, filetype) {
+    // upload info
+    var headers = { "Cache-Control": "max-age=315360000, no-transform, public" }
+
+    return inputStream
+        // s3 upload 하위폴더로 생성
+        .pipe(rename(function(path){
+            path.dirname = PROJECT + '/'+filetype+'/' + path.dirname;
+        }))
+        .pipe(publisher.publish(headers))
+        // .pipe(s3.publisher.cache())
+        .pipe(awspublish.reporter());
 }
+
 
 // gulp 4.0 변환
 
 // 통합 scss
 function sass_mix(){
-    return gulp
+    var before = gulp
         .src('./Scss/mix/style.min.dev.scss')
         // 해당파일 소스맵생성
         .pipe(sourcemaps.init())
@@ -113,18 +124,13 @@ function sass_mix(){
         // 소스맵할당 개발용 min파일
         .pipe(rename('style.min.dev.css'))
         // output
-        .pipe(gulp.dest('../public/css/'))
-        // s3 upload
-        .pipe(rename(function(path){
-            path.dirname = project + '/css/' + path.dirname;
-        }))
-        .pipe(publisher.publish(headers))
-        // .pipe(publisher.cache())
-        .pipe(awspublish.reporter());
+        .pipe(gulp.dest('../public/css/'));
+
+    return s3_upload(before, 'string tpye!');
 }
 // 분리형 scss
 function sass_single(){
-    return gulp
+    var before = gulp
         .src('./Scss/single/*.scss')
         // 해당파일 소스맵생성
         .pipe(sourcemaps.init())
@@ -154,18 +160,13 @@ function sass_single(){
         .pipe(sourcemaps.write('/map',{sourcRoot: '.'}))
         // output
         .pipe(gulp.dest('../public/css/'))
-        // s3upload
-        .pipe(rename(function(path){
-            path.dirname = PROJECT + '/css/' + path.dirname;
-        }))
-        .pipe(publisher.publish(headers))
-        // .pipe(publisher.cache())
-        .pipe(awspublish.reporter());
+    
+    return s3_upload(before, 'string tpye!');
 }
 
 // Babel
 function babel(){
-    return gulp
+    var before =  gulp
         .src('./Babel/*.js')
         .pipe(sourcemaps.init())
         .pipe(
@@ -190,19 +191,14 @@ function babel(){
             )
         )
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('../public/js/'))
-        // s3upload
-        .pipe(rename(function(path){
-            path.dirname = PROJECT + '/js/' + path.dirname;
-        }))
-        .pipe(publisher.publish(headers))
-        // .pipe(publisher.cache())
-        .pipe(awspublish.reporter());
+        .pipe(gulp.dest('../public/js/'));
+
+    return s3_upload(before, 'string tpye!');
 }
 
 // TypeScript
 function typescript(){
-    return gulp
+    var before = gulp
 		.src('./TypeScript/*.ts')
 		.pipe(sourcemaps.init())
         .pipe(
@@ -227,33 +223,23 @@ function typescript(){
             )
         )
 		.pipe(sourcemaps.write())
-        .pipe(gulp.dest('../public/js/'))
-        // s3upload
-        .pipe(rename(function(path){
-            path.dirname = PROJECT + '/js/' + path.dirname;
-        }))
-        .pipe(publisher.publish(headers))
-        // .pipe(publisher.cache())
-        .pipe(awspublish.reporter());
+        .pipe(gulp.dest('../public/js/'));
+
+    return s3_upload(before, 'string tpye!');
 }
 
 // Crossbrowser
 function cross_browser(){
-    return gulp
+    var before = gulp
         .src('../public/css/style.min.dev.css')
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
         .pipe(rename('style.min.css'))
-        .pipe(gulp.dest('../public/css/'))
-        // s3upload
-        .pipe(rename(function(path){
-            path.dirname = PROJECT + '/css/' + path.dirname;
-        }))
-        .pipe(publisher.publish(headers))
-        // .pipe(publisher.cache())
-        .pipe(awspublish.reporter());
+        .pipe(gulp.dest('../public/css/'));
+
+    return s3_upload(before, 'string tpye!');
 }
 
 // watch
