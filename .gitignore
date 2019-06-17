@@ -7,5 +7,4 @@ screenlog.*
 package-lock.json
 
 # Folder
-secret/
 node_modules/
