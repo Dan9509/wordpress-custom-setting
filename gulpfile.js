@@ -81,7 +81,7 @@ var headers = {
 // gulp 4.0 변환
 
 // 통합 scss
-function sass_integrated(){
+function sass_mix(){
     return gulp
         .src('./Scss/mix/style.min.dev.scss')
         // 해당파일 소스맵생성
@@ -123,7 +123,7 @@ function sass_integrated(){
         .pipe(awspublish.reporter());
 }
 // 분리형 scss
-function sass_container(){
+function sass_single(){
     return gulp
         .src('./Scss/single/*.scss')
         // 해당파일 소스맵생성
@@ -258,8 +258,8 @@ function cross_browser(){
 
 // watch
 gulp.task('hello', function(){
-    gulp.watch('./scss/mix/*.scss', gulp.series(gulp.parallel(sass_integrated),cross_browser));
-    gulp.watch('./scss/single/*.scss', gulp.series(gulp.parallel(sass_container)));
+    gulp.watch('./scss/mix/*.scss', gulp.series(gulp.parallel(sass_mix),cross_browser));
+    gulp.watch('./scss/single/*.scss', gulp.series(gulp.parallel(sass_single)));
     gulp.watch('./Babel/*.js', gulp.series(babel));
     gulp.watch('./TypeScript/*.ts', gulp.series(typescript));
 });
