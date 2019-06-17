@@ -31,6 +31,7 @@ const   sass 			= require('gulp-sass'),
         bb 				= require('gulp-babel'),
         ts 				= require('gulp-typescript'),
         autoprefixer	= require('gulp-autoprefixer'),
+        awspublish      = require('gulp-awspublish'),
         rename 			= require('gulp-rename');
 
 // gulp notice plugin Slack
@@ -108,7 +109,7 @@ function sass_integrated(){
             )
         )
         // source map 경로 css 마지막 추가
-        .pipe(sourcemaps.write('/map',{sourcRoot: '.'}))
+        .pipe(sourcemaps.write())
         // 소스맵할당 개발용 min파일
         .pipe(rename('style.min.dev.css'))
         // output
@@ -188,7 +189,7 @@ function babel(){
                 }
             )
         )
-        .pipe(sourcemaps.write('/map/',{sourcRoot: '.'}))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('../public/js/'))
         // s3upload
         .pipe(rename(function(path){
@@ -225,7 +226,7 @@ function typescript(){
                 }
             )
         )
-		.pipe(sourcemaps.write('/map/',{sourcRoot: '.'}))
+		.pipe(sourcemaps.write())
         .pipe(gulp.dest('../public/js/'))
         // s3upload
         .pipe(rename(function(path){
