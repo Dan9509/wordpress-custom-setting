@@ -95,7 +95,7 @@ function s3_upload(inputStream, filetype) {
 // 통합 scss
 function sass_mix(){
     var before = gulp
-        .src('./Scss/mix/style.min.dev.scss')
+        .src('./Scss/mix/style.min.scss')
         // 해당파일 소스맵생성
         .pipe(sourcemaps.init())
         // slick notice
@@ -242,8 +242,8 @@ function cross_browser(){
 
 // watch
 gulp.task('hello', function(){
-    gulp.watch('./scss/mix/*.scss', gulp.series(gulp.parallel(sass_mix),cross_browser));
-    gulp.watch('./scss/single/*.scss', gulp.series(gulp.parallel(sass_single)));
+    gulp.watch('./Scss/mix/*.scss', gulp.series(gulp.parallel(sass_mix),cross_browser));
+    gulp.watch('./Scss/single/*.scss', gulp.series(gulp.parallel(sass_single)));
     gulp.watch('./Babel/*.js', gulp.series(babel));
     gulp.watch('./TypeScript/*.ts', gulp.series(typescript));
 });
