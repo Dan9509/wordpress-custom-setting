@@ -25,7 +25,8 @@ const   sass 			= require('gulp-sass'),
         sourcemaps 		= require('gulp-sourcemaps'),
         bb 				= require('gulp-babel'),
         ts 				= require('gulp-typescript'),
-        autoprefixer	= require('gulp-autoprefixer'),
+        autoprefixer	= require('autoprefixer'),
+        postcss         = require('gulp-postcss'),
         awspublish      = require('gulp-awspublish'),
         rename 			= require('gulp-rename');
 
@@ -232,10 +233,7 @@ function typescript(){
 function cross_browser(){
     var before = gulp
         .src('../public/css/style.min.dev.css')
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: false
-        }))
+        .pipe(postcss([ autoprefixer() ]))
         .pipe(rename('style.min.css'))
         .pipe(gulp.dest('../public/css/'));
 
