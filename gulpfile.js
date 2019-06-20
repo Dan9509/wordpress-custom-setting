@@ -31,7 +31,7 @@ const   sass 			= require('gulp-sass'),
         rename 			= require('gulp-rename');
 
 // dev import
-const   key             = require('./secret/key.js');
+const   key             = require('./.secret/key.js');
 
 // gulp notice plugin Slack
 // webhook url list
