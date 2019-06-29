@@ -1,8 +1,8 @@
 // Responsive Web Design
 $breakpoints: (
 	'small': (max-width: 500px),
-	'medium': (max-width: 800px),
-	'large': (max-width: 1000px),
+	'medium': (max-width: 768px),
+	'large': (max-width: 980px),
 	'huge': (min-width: 1240px),
 );
 /// Responsive breakpoint manager
