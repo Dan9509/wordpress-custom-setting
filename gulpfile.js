@@ -5,7 +5,6 @@
     __PROJECT_NAME__
 
     **slack notice
-    __WEBHOOK_URL__
     __CDN_URL__
     
     **S3 upload
@@ -50,7 +49,7 @@ const key = require("./.secret/key.js");
 // gulp notice plugin Slack
 // webhook url list
 const slack_dataset = {
-  space: "__WEBHOOK_URL__",
+  space: key.SLACK.webhook,
   // vscode       : https://github.com/vscode-icons/vscode-icons/tree/master/icons
   // meterial     : https://github.com/PKief/vscode-material-icon-theme/tree/master/icons
   icon_url: {
