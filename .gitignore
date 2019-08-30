@@ -5,6 +5,7 @@ screenlog.*
 #
 *.bak
 *.log
+*.lock
 package-lock.json
 
 # Folder
