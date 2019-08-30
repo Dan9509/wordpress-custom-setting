@@ -2,6 +2,9 @@
 screenlog.*
 .DS_store
 
+# IDC work setting
+.idea/
+
 #
 *.bak
 *.log
