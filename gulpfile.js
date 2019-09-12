@@ -30,7 +30,8 @@ const sass = require("gulp-sass"),
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
   awsPublish = require("gulp-awspublish"),
-  rename = require("gulp-rename");
+  rename = require("gulp-rename"),
+  S3Upload = require('./GulpFunctions/S3Upload').S3Upload;
 
 /**************************
 
@@ -65,43 +66,6 @@ const slack_notice = (user, channel, url, icon_url) => {
     user: user,
     icon_url: icon_url
   });
-};
-
-let publisher = awsPublish.create(
-  {
-    // 해당지역코드 서울 : 'ap-northeast-2'
-    region: "ap-northeast-2",
-    params: {
-      Bucket: key.BUCKET.NAME
-    },
-    accessKeyId: key.BUCKET.ACCESSKEYID,
-    secretAccessKey: key.BUCKET.SECRETACCESSKEY
-  }
-  // TODO: 알아봐야하는 옵션
-  // 정확하게 몰라서 적용하지 않음
-  // {
-  //     cacheFileName: "your-cache-location"
-  // }
-);
-
-// make reusable pipeline
-// s3 upload function
-const s3_upload = (inputStream, filename) => {
-  // upload info
-  let headers = { "Cache-Control": "max-age=315360000, no-transform, public" };
-
-  return (
-    inputStream
-    // s3 upload 하위폴더로 생성
-      .pipe(
-        rename(path => {
-          path.dirname = PROJECT + "/" + filename + "/" + path.dirname;
-        })
-      )
-      .pipe(publisher.publish(headers))
-      // .pipe(s3.publisher.cache())
-      .pipe(awsPublish.reporter())
-  );
 };
 
 // gulp 4.0 변환
@@ -144,7 +108,7 @@ const sass_mix = () => {
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "css");
+    return S3Upload(before, "css");
   } else {
     return before;
   }
@@ -186,7 +150,7 @@ const sass_single = () => {
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "css");
+    return S3Upload(before, "css");
   } else {
     return before;
   }
@@ -224,7 +188,7 @@ const babel = () => {
     .pipe(gulp.dest("../public/js/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "js");
+    return S3Upload(before, "js");
   } else {
     return before;
   }
@@ -262,7 +226,7 @@ const typescript = () => {
     .pipe(gulp.dest("../public/js/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "js");
+    return S3Upload(before, "js");
   } else {
     return before;
   }
@@ -277,7 +241,7 @@ const cross_browser = () => {
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "css");
+    return S3Upload(before, "css");
   } else {
     return before;
   }
