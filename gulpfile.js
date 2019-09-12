@@ -1,16 +1,16 @@
 /**************************
 
-    대체하고 삭제영역
+ 대체하고 삭제영역
 
-    __PROJECT_NAME__
+ __PROJECT_NAME__
 
-    **slack notice
-    __CDN_URL__
-    
-    **S3 upload
-    __string__
+ **slack notice
+ __CDN_URL__
 
-***************************/
+ **S3 upload
+ __string__
+
+ ***************************/
 
 // gulpfile.js
 const gulp = require("gulp");
@@ -27,16 +27,16 @@ const sass = require("gulp-sass"),
   sourcemaps = require("gulp-sourcemaps"),
   bb = require("gulp-babel"),
   ts = require("gulp-typescript"),
-  autoprefixer = require("autoprefixer"),
+  autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
-  awspublish = require("gulp-awspublish"),
+  awsPublish = require("gulp-awspublish"),
   rename = require("gulp-rename");
 
 /**************************
 
-  사용하고싶은 옵션만 선택 활성화
+ 사용하고싶은 옵션만 선택 활성화
 
-***************************/
+ ***************************/
 const OPTION = {
   sass: true,
   babel: true,
@@ -58,18 +58,16 @@ const slack_dataset = {
     typescript: CDN_URL + "/icons/typescript.png"
   }
 };
-function slack_notice(user, channel, url, icon_url) {
-  var slack = require("gulp-slack")({
+const slack_notice = (user, channel, url, icon_url) => {
+  return require("gulp-slack")({
     url: url,
     channel: channel,
     user: user,
     icon_url: icon_url
   });
+};
 
-  return slack;
-}
-
-var publisher = awspublish.create(
+let publisher = awsPublish.create(
   {
     // 해당지역코드 서울 : 'ap-northeast-2'
     region: "ap-northeast-2",
@@ -88,13 +86,13 @@ var publisher = awspublish.create(
 
 // make reusable pipeline
 // s3 upload function
-function s3_upload(inputStream, filetype) {
+const s3_upload = (inputStream, filetype) => {
   // upload info
-  var headers = { "Cache-Control": "max-age=315360000, no-transform, public" };
+  let headers = { "Cache-Control": "max-age=315360000, no-transform, public" };
 
   return (
     inputStream
-      // s3 upload 하위폴더로 생성
+    // s3 upload 하위폴더로 생성
       .pipe(
         rename(function(path) {
           path.dirname = PROJECT + "/" + filetype + "/" + path.dirname;
@@ -102,15 +100,15 @@ function s3_upload(inputStream, filetype) {
       )
       .pipe(publisher.publish(headers))
       // .pipe(s3.publisher.cache())
-      .pipe(awspublish.reporter())
+      .pipe(awsPublish.reporter())
   );
-}
+};
 
 // gulp 4.0 변환
 
 // 통합 scss
-function sass_mix() {
-  var before = gulp
+const sass_mix = () => {
+  let before = gulp
     .src("./Scss/mix/style.min.scss")
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
@@ -146,14 +144,14 @@ function sass_mix() {
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.slack) {
-    return s3_upload(before, "__string__");
+    return s3_upload(before, "css");
   } else {
     return before;
   }
 }
 // 분리형 scss
-function sass_single() {
-  var before = gulp
+const sass_single = () => {
+  let before = gulp
     .src("./Scss/single/*.scss")
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
@@ -187,15 +185,15 @@ function sass_single() {
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "__string__");
+    return s3_upload(before, "css");
   } else {
     return before;
   }
-}
+};
 
 // Babel
-function babel() {
-  var before = gulp
+const babel = () => {
+  let before = gulp
     .src("./Babel/*.js")
     .pipe(sourcemaps.init())
     .pipe(
@@ -225,15 +223,15 @@ function babel() {
     .pipe(gulp.dest("../public/js/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "__string__");
+    return s3_upload(before, "js");
   } else {
     return before;
   }
-}
+};
 
 // TypeScript
-function typescript() {
-  var before = gulp
+const typescript = () => {
+  let before = gulp
     .src("./TypeScript/*.ts")
     .pipe(sourcemaps.init())
     .pipe(
@@ -263,29 +261,29 @@ function typescript() {
     .pipe(gulp.dest("../public/js/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "__string__");
+    return s3_upload(before, "js");
   } else {
     return before;
   }
-}
+};
 
 // Crossbrowser
-function cross_browser() {
-  var before = gulp
+const cross_browser = () => {
+  let before = gulp
     .src("../public/css/style.min.dev.css")
-    .pipe(postcss([autoprefixer()]))
+    .pipe(postcss([autoPrefix()]))
     .pipe(rename("style.min.css"))
     .pipe(gulp.dest("../public/css/"));
 
   if (OPTION.s3) {
-    return s3_upload(before, "__string__");
+    return s3_upload(before, "css");
   } else {
     return before;
   }
-}
+};
 
 // watch
-gulp.task("hello", function() {
+gulp.task("hello", () => {
   gulp.watch(
     "./Scss/mix/*.scss",
     gulp.series(gulp.parallel(sass_mix), cross_browser)
