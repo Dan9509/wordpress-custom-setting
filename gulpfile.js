@@ -1,37 +1,24 @@
 /**************************
 
- 대체하고 삭제영역
-
- __PROJECT_NAME__
-
- **slack notice
- __CDN_URL__
-
- **S3 upload
- __string__
+ 전역환경변수 설정후 사용!!
+ (feat. .env)
 
  ***************************/
 
 // gulpfile.js
 const gulp = require("gulp");
 
-// 프로젝트명
-const PROJECT = "gulpTest";
-
-// cdn url
-var CDN_URL = "__CDN_URL__";
-
 // gulp plugin
 const sass = require("gulp-sass"),
-  pug = require("gulp-pug"),
   sourcemaps = require("gulp-sourcemaps"),
   bb = require("gulp-babel"),
   ts = require("gulp-typescript"),
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
-  awsPublish = require("gulp-awspublish"),
   rename = require("gulp-rename"),
-  S3Upload = require('./GulpFunctions/S3Upload').S3Upload;
+  S3Upload = require('./GulpFunctions/S3Upload').S3Upload,
+  SlackNotice = require('./GulpFunctions/Slack').SlackNotice,
+  NoticeContent = require('./GulpFunctions/Slack').NoticeContent;
 
 /**************************
 
@@ -42,30 +29,6 @@ const OPTION = {
   sass: true,
   babel: true,
   s3: true,
-};
-
-// dev import
-const key = require("./.secret/devKey.js");
-
-// gulp notice plugin Slack
-// webhook url list
-const slack_dataset = {
-  space: key.SLACK.webhook,
-  // vscode       : https://github.com/vscode-icons/vscode-icons/tree/master/icons
-  // meterial     : https://github.com/PKief/vscode-material-icon-theme/tree/master/icons
-  icon_url: {
-    sass: CDN_URL + "/icons/sass.png",
-    babel: CDN_URL + "/icons/babel.png",
-    typescript: CDN_URL + "/icons/typescript.png"
-  }
-};
-const slack_notice = (user, channel, url, icon_url) => {
-  return require("gulp-slack")({
-    url: url,
-    channel: channel,
-    user: user,
-    icon_url: icon_url
-  });
 };
 
 // gulp 4.0 변환
@@ -79,23 +42,7 @@ const sass_mix = () => {
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
-        slack_notice(
-          "Sass",
-          "",
-          slack_dataset.space,
-          slack_dataset.icon_url.sass
-        )([
-          {
-            text: PROJECT,
-            color: "#ec407a",
-            fields: [
-              {
-                title: "에러발생 | mix",
-                value: err.message.toString()
-              }
-            ]
-          }
-        ]);
+        SlackNotice("Sass")(NoticeContent(err.message.toString(), 'ERROR! | mix', '#ec407a'));
         console.log(err.message.toString());
         this.emit("end");
       })
@@ -123,23 +70,7 @@ const sass_single = () => {
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
-        slack_notice(
-          "Sass",
-          "",
-          slack_dataset.space,
-          slack_dataset.icon_url.sass
-        )([
-          {
-            text: PROJECT,
-            color: "#ec407a",
-            fields: [
-              {
-                title: "에러발생 | single",
-                value: err.message.toString()
-              }
-            ]
-          }
-        ]);
+        SlackNotice("Sass")(NoticeContent(err.message.toString(), 'ERROR! | single', '#ec407a'));
         console.log(err.message.toString());
         this.emit("end");
       })
@@ -163,23 +94,7 @@ const babel = () => {
     .pipe(sourcemaps.init())
     .pipe(
       bb().on("error", err => {
-        slack_notice(
-          "Babel",
-          "",
-          slack_dataset.space,
-          slack_dataset.icon_url.babel
-        )([
-          {
-            text: PROJECT,
-            color: "#fdd835",
-            fields: [
-              {
-                title: "에러발생 | Babel",
-                value: err.message.toString()
-              }
-            ]
-          }
-        ]);
+        SlackNotice("Babel")(NoticeContent(err.message.toString(), 'ERROR! | Babel', '#fdd835'));
         console.log(err.message.toString());
         this.emit("end");
       })
@@ -201,23 +116,7 @@ const typescript = () => {
     .pipe(sourcemaps.init())
     .pipe(
       ts().on("error", err => {
-        slack_notice(
-          "Typescript",
-          "",
-          slack_dataset.space,
-          slack_dataset.icon_url.typescript
-        )([
-          {
-            text: PROJECT,
-            color: "#0288d1",
-            fields: [
-              {
-                title: "에러발생 | Typescript",
-                value: err.message.toString()
-              }
-            ]
-          }
-        ]);
+        SlackNotice("Typescript")(NoticeContent(err.message.toString(), 'ERROR! | Typescript', '#0288d1'));
         console.log(err.message.toString());
         this.emit("end");
       })
