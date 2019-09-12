@@ -1,6 +1,11 @@
 require('dotenv').config();
-const awsPublish = require("gulp-awspublish"),
+const
+  awsPublish = require("gulp-awspublish"),
   rename = require("gulp-rename");
+
+
+// --------------- 구분선 ---------------
+
 
 const publisher = awsPublish.create(
   {
@@ -36,6 +41,9 @@ const S3Upload = (inputStream, filename) => {
       .pipe(awsPublish.reporter())
   );
 };
+
+
+// --------------- 구분선 ---------------
 
 
 exports.S3Upload = S3Upload;

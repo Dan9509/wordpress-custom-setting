@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+
+// --------------- 구분선 ---------------
+
+
 const SlackNotice = (user, channel) => {
   let iconUrl = process.env.CDN_URL;
   if(user !== undefined) {
@@ -46,6 +50,10 @@ const NoticeContent = (content, contentTitle, messageSidebarColor) => ([
     ]
   }
 ]);
+
+
+// --------------- 구분선 ---------------
+
 
 exports.SlackNotice = SlackNotice;
 exports.NoticeContent = NoticeContent;

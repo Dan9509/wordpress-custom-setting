@@ -1,4 +1,5 @@
-const gulp = require("gulp"),
+const
+  gulp = require("gulp"),
   sass = require("gulp-sass"),
   sourcemaps = require("gulp-sourcemaps"),
   autoPrefix = require("autoprefixer"),
@@ -7,6 +8,10 @@ const gulp = require("gulp"),
   S3Upload = require('./S3Upload').S3Upload,
   SlackNotice = require('./Slack').SlackNotice,
   NoticeContent = require('./Slack').NoticeContent;
+
+
+// --------------- 구분선 ---------------
+
 
 // 통합 scss
 const SassMix = () => {
@@ -76,6 +81,10 @@ const CrossBrowser = () => {
     return before;
   }
 };
+
+
+// --------------- 구분선 ---------------
+
 
 exports.SassMix = SassMix;
 exports.SassSingle = SassSingle;
