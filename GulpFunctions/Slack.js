@@ -1,22 +1,26 @@
 require('dotenv').config();
 
 const SlackNotice = (user, channel) => {
-  let iconUrl = '';
+  let iconUrl = process.env.CDN_URL;
   if(user !== undefined) {
     switch(user) {
       case 'Sass':
-        iconUrl = process.env.CDN_URL+'icons/sass.png';
+        iconUrl += 'icons/sass.png';
         break;
       case 'Babel':
-        iconUrl = process.env.CDN_URL+'icons/babel.png';
+        iconUrl += 'icons/babel.png';
         break;
       case 'Typescript':
-        iconUrl = process.env.CDN_URL+'icons/typescript.png';
+        iconUrl += 'icons/typescript.png';
         break;
       case 'S3':
-        iconUrl = process.env.CDN_URL+'icons/s3.png';
+        iconUrl += 'icons/s3.png';
+        break;
+      case 'Gulp':
+        iconUrl += 'icons/gulp.png';
         break;
       default:
+        iconUrl = '';
         break;
     }
   }
