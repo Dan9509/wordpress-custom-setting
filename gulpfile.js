@@ -16,7 +16,7 @@
 const gulp = require("gulp");
 
 // 프로젝트명
-const PROJECT = "__PROJECT_NAME__";
+const PROJECT = "gulpTest";
 
 // cdn url
 var CDN_URL = "__CDN_URL__";
@@ -40,11 +40,11 @@ const sass = require("gulp-sass"),
 const OPTION = {
   sass: true,
   babel: true,
-  s3: false
+  s3: true
 };
 
 // dev import
-const key = require("./.secret/key.js");
+const key = require("./.secret/devKey.js");
 
 // gulp notice plugin Slack
 // webhook url list
