@@ -86,7 +86,7 @@ let publisher = awsPublish.create(
 
 // make reusable pipeline
 // s3 upload function
-const s3_upload = (inputStream, filetype) => {
+const s3_upload = (inputStream, filename) => {
   // upload info
   let headers = { "Cache-Control": "max-age=315360000, no-transform, public" };
 
@@ -94,8 +94,8 @@ const s3_upload = (inputStream, filetype) => {
     inputStream
     // s3 upload 하위폴더로 생성
       .pipe(
-        rename(function(path) {
-          path.dirname = PROJECT + "/" + filetype + "/" + path.dirname;
+        rename(path => {
+          path.dirname = PROJECT + "/" + filename + "/" + path.dirname;
         })
       )
       .pipe(publisher.publish(headers))
@@ -114,7 +114,7 @@ const sass_mix = () => {
     .pipe(sourcemaps.init())
     // slick notice
     .pipe(
-      sass({ outputStyle: "compressed" }).on("error", function(err) {
+      sass({ outputStyle: "compressed" }).on("error", err => {
         slack_notice(
           "Sass",
           "",
@@ -148,7 +148,8 @@ const sass_mix = () => {
   } else {
     return before;
   }
-}
+};
+
 // 분리형 scss
 const sass_single = () => {
   let before = gulp
@@ -157,7 +158,7 @@ const sass_single = () => {
     .pipe(sourcemaps.init())
     // slick notice
     .pipe(
-      sass({ outputStyle: "compressed" }).on("error", function(err) {
+      sass({ outputStyle: "compressed" }).on("error", err => {
         slack_notice(
           "Sass",
           "",
@@ -197,7 +198,7 @@ const babel = () => {
     .src("./Babel/*.js")
     .pipe(sourcemaps.init())
     .pipe(
-      bb().on("error", function(err) {
+      bb().on("error", err => {
         slack_notice(
           "Babel",
           "",
@@ -235,7 +236,7 @@ const typescript = () => {
     .src("./TypeScript/*.ts")
     .pipe(sourcemaps.init())
     .pipe(
-      ts().on("error", function(err) {
+      ts().on("error", err => {
         slack_notice(
           "Typescript",
           "",
