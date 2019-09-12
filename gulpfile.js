@@ -40,7 +40,7 @@ const sass = require("gulp-sass"),
 const OPTION = {
   sass: true,
   babel: true,
-  s3: true
+  s3: true,
 };
 
 // dev import
@@ -143,7 +143,7 @@ const sass_mix = () => {
     // output
     .pipe(gulp.dest("../public/css/"));
 
-  if (OPTION.slack) {
+  if (OPTION.s3) {
     return s3_upload(before, "css");
   } else {
     return before;
