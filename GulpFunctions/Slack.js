@@ -60,9 +60,9 @@ const NoticeContent = (content, contentTitle, messageSidebarColor) => ([
 
 // Slack Upload function
 const UploadOptions = (user) => ({
-  file: fs.createReadStream(`${__dirname}/${user}.log`),
+  file: fs.createReadStream(`${__dirname}/${user}`),
   filetype: 'shell',
-  title: `${user}.log`,
+  title: `${user}`,
   initialComment: `${user}`,
   channels: process.env.SLACK_CHANNEL,
 });
@@ -72,7 +72,7 @@ const GulpSlack = (gulpError, username) => (
   new Promise(resolve => {
     fs.writeFile(
       // Error log 작성
-      `${__dirname}/${username}.log`,
+      `${__dirname}/${username}`,
       // Error 내용
       gulpError.message,
       // 오류 콜백
@@ -92,7 +92,7 @@ const GulpSlack = (gulpError, username) => (
     })
     // Log file delete
     .then(() => {
-      fs.unlink(`${__dirname}/${username}.log`, err => {
+      fs.unlink(`${__dirname}/${username}`, err => {
         err === null ?
           gutil.log(chalk.green('Success (gulp-slack-upload): Deleted')) :
           gutil.log(chalk.red('Error deleteFile: ', err));
