@@ -4,8 +4,7 @@ const
   Babel = require("gulp-babel"),
   TypeScript = require("gulp-typescript"),
   S3Upload = require('./S3Upload').S3Upload,
-  SlackNotice = require('./Slack').SlackNotice,
-  NoticeContent = require('./Slack').NoticeContent;
+  GulpSlack = require('./Slack').GulpSlack;
 
 
 // --------------- 구분선 ---------------
@@ -18,8 +17,7 @@ const BabelBase = () => {
     .pipe(sourcemaps.init())
     .pipe(
       Babel().on("error", err => {
-        SlackNotice("Babel")(NoticeContent(err.message.toString(), 'ERROR! | Babel', '#fdd835'));
-        console.log(err.message.toString());
+        GulpSlack(err, 'Babel');
         this.emit("end");
       })
     )
@@ -40,8 +38,7 @@ const TypeScriptBase = () => {
     .pipe(sourcemaps.init())
     .pipe(
       TypeScript().on("error", err => {
-        SlackNotice("Typescript")(NoticeContent(err.message.toString(), 'ERROR! | Typescript', '#0288d1'));
-        console.log(err.message.toString());
+        GulpSlack(err, 'Typescript');
         this.emit("end");
       })
     )

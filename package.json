@@ -32,7 +32,11 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "node-pre-gyp": "^0.13.0",
+    "node-slack-upload": "^2.0.0",
     "postcss-cli": "^6.1.2",
     "typescript": "^3.5.2"
+  },
+  "devDependencies": {
+    "gulp-slack-upload": "^0.4.4"
   }
 }

@@ -6,8 +6,7 @@ const
   postcss = require("gulp-postcss"),
   rename = require("gulp-rename"),
   S3Upload = require('./S3Upload').S3Upload,
-  SlackNotice = require('./Slack').SlackNotice,
-  NoticeContent = require('./Slack').NoticeContent;
+  GulpSlack = require('./Slack').GulpSlack;
 
 
 // --------------- 구분선 ---------------
@@ -22,8 +21,7 @@ const SassMix = () => {
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
-        SlackNotice("Sass")(NoticeContent(err.message.toString(), 'ERROR! | mix', '#ec407a'));
-        console.log(err.message.toString());
+        GulpSlack(err, 'Sass Mix');
         this.emit("end");
       })
     )
@@ -50,8 +48,7 @@ const SassSingle = () => {
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
-        SlackNotice("Sass")(NoticeContent(err.message.toString(), 'ERROR! | single', '#ec407a'));
-        console.log(err.message.toString());
+        GulpSlack(err, 'Sass min');
         this.emit("end");
       })
     )
@@ -63,7 +60,6 @@ const SassSingle = () => {
   if (process.env.OPTION_S3) {
     return S3Upload(before, "css");
   } else {
-    console.log(OPTION);
     return before;
   }
 };
