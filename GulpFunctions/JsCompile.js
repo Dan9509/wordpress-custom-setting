@@ -2,6 +2,7 @@ const
   gulp = require("gulp"),
   sourcemaps = require("gulp-sourcemaps"),
   Babel = require("gulp-babel"),
+  concat = require("gulp-concat"),
   TypeScript = require("gulp-typescript"),
   S3Upload = require('./S3Upload').S3Upload,
   GulpSlack = require('./Slack').GulpSlack;
@@ -17,10 +18,11 @@ const BabelBase = () => {
     .pipe(sourcemaps.init())
     .pipe(
       Babel().on("error", err => {
-        GulpSlack(err, 'Babel');
+        console.log(err.message);
         this.emit("end");
       })
     )
+    .pipe(concat("index.js"))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest("../public/js/"));
 
