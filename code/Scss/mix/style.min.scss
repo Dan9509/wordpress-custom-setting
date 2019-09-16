@@ -1,33 +1,4 @@
-// Responsive Web Design
-$breakpoints: (
-	'small': (max-width: 500px),
-	'medium': (max-width: 768px),
-	'large': (max-width: 980px),
-	'huge': (min-width: 1240px),
-);
-/// Responsive breakpoint manager
-/// @access public
-/// @param {String} $breakpoint - Breakpoint
-/// @requires $breakpoints
-@mixin respond-to($breakpoint) {
-	$raw-query: map-get($breakpoints, $breakpoint);
-
-	@if $raw-query {
-		$query: if(
-			type-of($raw-query) == 'string',
-			unquote($raw-query),
-			inspect($raw-query)
-		);
-
-		@media #{$query} {
-			@content;
-		}
-	} @else {
-		@error 'No value found for `#{$breakpoint}`. '
-			+ 'Please make sure it is defined in `$breakpoints` map.';
-	}
-}
-
+@import 'utile.scss';
 @import 'default.scss';
 @import 'structure.scss';
 
