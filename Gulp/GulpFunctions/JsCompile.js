@@ -14,7 +14,7 @@ const
 // Babel
 const BabelBase = () => {
   let before = gulp
-    .src("./Babel/*.js")
+    .src("../code/Vanilla/*.js")
     .pipe(sourcemaps.init())
     .pipe(
       Babel().on("error", err => {
@@ -26,7 +26,7 @@ const BabelBase = () => {
     .pipe(sourcemaps.write())
     .pipe(gulp.dest("../public/js/"));
 
-  if (process.env.OPTION_S3) {
+  if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
   } else {
     return before;
@@ -36,7 +36,7 @@ const BabelBase = () => {
 // TypeScript
 const TypeScriptBase = () => {
   let before = gulp
-    .src("./TypeScript/*.ts")
+    .src("../code/TypeScript/*.ts")
     .pipe(sourcemaps.init())
     .pipe(
       TypeScript().on("error", err => {
@@ -47,7 +47,7 @@ const TypeScriptBase = () => {
     .pipe(sourcemaps.write())
     .pipe(gulp.dest("../public/js/"));
 
-  if (process.env.OPTION_S3) {
+  if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
   } else {
     return before;
