@@ -14,6 +14,7 @@ package-lock.json
 # Folder
 node_modules/
 .secret/devKey.js
+public/
 
 # environment
 .env
