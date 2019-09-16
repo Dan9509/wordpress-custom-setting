@@ -4,7 +4,6 @@ const
   sourcemaps = require("gulp-sourcemaps"),
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
-  concat = require("gulp-concat"),
   rename = require("gulp-rename"),
   S3Upload = require('./S3Upload').S3Upload,
   GulpSlack = require('./Slack').GulpSlack;
@@ -16,7 +15,7 @@ const
 // 통합 scss
 const SassMix = () => {
   let before = gulp
-    .src("./Scss/mix/*.scss")
+    .src("../code/Scss/mix/style.min.scss")
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
@@ -26,13 +25,14 @@ const SassMix = () => {
         this.emit("end");
       })
     )
-    .pipe(concat('style.min.dev.css'))
     // source map 경로 css 마지막 추가
     .pipe(sourcemaps.write())
+    // 소스맵할당 개발용 min파일
+    .pipe(rename("style.min.dev.css"))
     // output
     .pipe(gulp.dest("../public/css/"));
 
-  if (process.env.OPTION_S3) {
+  if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
   } else {
     return before;
@@ -42,7 +42,7 @@ const SassMix = () => {
 // 분리형 scss
 const SassSingle = () => {
   let before = gulp
-    .src("./Scss/single/*.scss")
+    .src("../code/Scss/single/*.scss")
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
@@ -57,7 +57,7 @@ const SassSingle = () => {
     // output
     .pipe(gulp.dest("../public/css/"));
 
-  if (process.env.OPTION_S3) {
+  if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
   } else {
     return before;
@@ -71,7 +71,7 @@ const CrossBrowser = () => {
     .pipe(rename("style.min.css"))
     .pipe(gulp.dest("../public/css/"));
 
-  if (process.env.OPTION_S3) {
+  if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
   } else {
     return before;
