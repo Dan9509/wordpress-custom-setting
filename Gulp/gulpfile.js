@@ -23,19 +23,19 @@ gulp.task("hello", () => {
 
   // 통합 SCSS 기능
   gulp.watch(
-    "./Scss/mix/*.scss",
+    "../code/Scss/mix/*.scss",
     gulp.series(gulp.parallel(SassMix), CrossBrowser)
   );
 
   // 개별 SCSS 기능
   gulp.watch(
-    "./Scss/single/*.scss",
+    "../code/Scss/single/*.scss",
     gulp.series(gulp.parallel(SassSingle), CrossBrowser)
   );
 
   // Babel!!
-  gulp.watch("./Babel/*.js", gulp.series(Babel));
+  gulp.watch("../code/Vanilla/*.js", gulp.series(Babel));
 
   // TypeScript!!
-  gulp.watch("./TypeScript/*.ts", gulp.series(TypeScript));
+  gulp.watch("../code/TypeScript/*.ts", gulp.series(TypeScript));
 });
