@@ -17,8 +17,13 @@ const BabelBase = () => {
     .src("../code/Vanilla/*.js")
     .pipe(sourcemaps.init())
     .pipe(
-      Babel().on("error", err => {
+      Babel({
+        presets: ["@babel/preset-env"],
+        highlightCode: false,
+        retainLines: true
+      }).on("error", err => {
         console.log(err.message);
+        GulpSlack(err, 'Babel');
         this.emit("end");
       })
     )
