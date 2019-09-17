@@ -1,12 +1,17 @@
 require('dotenv').config();
 const
   fs = require('fs'),
+  path = require('path'),
   SlackUpload = require('gulp-slack-upload'),
   gutil = require('gutil'),
   chalk = require('chalk');
 
 // --------------- 구분선 ---------------
 
+const isOPTION = {
+  message: process.env.OPTION_SLACK_MESSAGE === 'true',
+  upload: process.env.OPTION_SLACK_UPLOAD === 'true'
+};
 
 // Slack message setting
 const MessageContent = (gulpError, username) => {
@@ -79,20 +84,22 @@ const NoticeContent = (Message) => ([
 ]);
 
 // Slack Upload function
-const UploadOptions = (user) => ({
-  file: fs.createReadStream(`${__dirname}/${user}`),
+const UploadOptions = (username) => ({
+  file: fs.createReadStream(path.join(__dirname, '..', 'log', `${username}.log`)),
   filetype: 'shell',
-  title: `${user}`,
-  initialComment: `${user}`,
+  title: `${username}`,
+  initialComment: `${username}.log`,
   channels: process.env.SLACK_CHANNEL,
 });
 
 // output slack work flow
-const GulpSlack = (gulpError, username) => (
-  new Promise(resolve => {
+const GulpSlack = (gulpError, username) => {
+  const logPath = path.join(__dirname, '..', 'log', `${username}.log`);
+  console.log(logPath);
+  return new Promise(resolve => {
     fs.writeFile(
       // Error log 작성
-      `${__dirname}/${username}`,
+      logPath,
       // Error 내용
       gulpError.message,
       // 오류 콜백
@@ -106,22 +113,29 @@ const GulpSlack = (gulpError, username) => (
     );
 
   })
-    // Slack upload!!
+    // Slack upload & Message !!
     .then(() => {
-      SlackUpload(process.env.SLACK_API_GULPBOT,UploadOptions(username))
+      if(isOPTION.upload)
+        SlackUpload(process.env.SLACK_API_GULPBOT,UploadOptions(username));
+      else if(isOPTION.message) {
+        let Message = MessageContent(gulpError, username);
+        SlackNotice(username, '', Message.iconUrl)(NoticeContent(Message));
+      }
     })
     // Log file delete
     .then(() => {
-      fs.unlink(`${__dirname}/${username}`, err => {
-        err === null ?
-          gutil.log(chalk.green('Success (gulp-slack-upload): Deleted')) :
-          gutil.log(chalk.red('Error deleteFile: ', err));
-      })
+      if(isOPTION.upload && isOPTION.message) {
+        fs.unlink(logPath, err => {
+          err === null ?
+            gutil.log(chalk.green('Success (gulp-slack-upload): Deleted')) :
+            gutil.log(chalk.red('Error deleteFile: ', err));
+        })
+      }
     })
     .catch(err => {
       console.log(err);
     })
-);
+};
 
 // --------------- 구분선 ---------------
 
