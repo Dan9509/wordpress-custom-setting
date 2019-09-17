@@ -12,9 +12,9 @@
 - 기능추가
     - [x] Gulp error log file for Slack File upload  
         - [x] Sass
-        - [ ] Babel
+        - [x] Babel
         - [ ] TypeScript
-    - [ ] Slack webhook && error log upload toggle
+    - [x] Slack webhook && error log upload toggle
     - [ ] S3 upload state message FWD slack
     - [ ] gulp plumber for Error handleing
     - [ ] Auto Prefixer browser list setting!
