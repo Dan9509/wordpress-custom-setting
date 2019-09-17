@@ -30,3 +30,7 @@ Babel gulp error 출력문이 유니코드의 컬러값을 포함한 `err.messag
 '/Users/sanghyeonhan/@Project/wp_develop_space/Babel/TEST.js: Unexpected token (5:7)\n\n\u001b[0m \u001b[90m 3 | \u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 4 | \u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 | \u001b[39m\u001b[33mTEST\u001b[39m()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m   | \u001b[39m       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m',
   name: 'SyntaxError',
 ```
+
+#### 해결
+
+gulp-babel은 babel의 옵션을 .babelrc에서 적용되지않고 pipeline에서 gulp-babel의 옵션으로 적용해줘야지 babel 옵션이 적용된다.
