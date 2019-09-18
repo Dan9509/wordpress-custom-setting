@@ -113,8 +113,8 @@ const GulpSlack = (gulpError, username) => {
       else if(isOPTION.message) {
         // let Message = MessageContent(gulpError, 'code', username);
         let Message = {
-          message: gulpError,
-          messageType: 'code',
+          content: gulpError.message,
+          Type: 'code',
           username
         };
         SlackNotice(username, Message);
