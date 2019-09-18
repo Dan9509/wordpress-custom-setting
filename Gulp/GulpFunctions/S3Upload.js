@@ -1,7 +1,8 @@
 require('dotenv').config();
 const
   awsPublish = require("gulp-awspublish"),
-  rename = require("gulp-rename");
+  rename = require("gulp-rename"),
+  report = require('../custom_node_modules/gulp-awspublish/log-reporter');
 
 
 // --------------- 구분선 ---------------
@@ -38,7 +39,7 @@ const S3Upload = (inputStream, filename) => {
       )
       .pipe(publisher.publish(headers))
       // .pipe(s3.publisher.cache())
-      .pipe(awsPublish.reporter())
+      .pipe(report())
   );
 };
 
