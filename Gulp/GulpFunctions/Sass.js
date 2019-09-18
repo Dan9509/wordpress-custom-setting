@@ -72,7 +72,7 @@ const CrossBrowser = () => {
     .pipe(gulp.dest("../public/css/"));
 
   if (process.env.OPTION_S3 !== 'false') {
-    return S3Upload(before, "css");
+    return S3Upload(before, "css", 'slackNoPush');
   } else {
     return before;
   }
