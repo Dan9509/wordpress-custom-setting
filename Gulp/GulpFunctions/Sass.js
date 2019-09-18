@@ -20,7 +20,7 @@ const SassMix = () => {
     .pipe(sourcemaps.init())
     // slick notice
     .pipe(
-      sass().on("error", err => {
+      sass({ outputStyle: "compressed" }).on("error", err => {
         GulpSlack(err, 'SassMix');
         this.emit("end");
       })
