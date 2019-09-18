@@ -14,21 +14,21 @@ const isOPTION = {
 };
 
 // Slack message setting
-let MessageContent = (message, messageType, username) => {
-  let isCodeMsg = messageType === 'code';
+const SlackNotice = (username, Message, channel) => {
+  let isCodeMsg = Message.Type === 'code';
   let ErrorContent = {
     title: `에러발생 | ${username}`,
-    value: `\`\`\`shell ${message.message}\`\`\``
+    value: `\`\`\`shell ${Message.content}\`\`\``
   };
   let S3uploadState = {
-    title: 'S3 Upload',
-    value: message
+    title: null,
+    value: Message
   };
 
   let msg = {
     iconUrl: process.env.CDN_URL,
     pushData: [{
-      text: process.env.PROJECT+'\n---',
+      text: process.env.PROJECT,
       color: '',
       fields: [ isCodeMsg ? ErrorContent : S3uploadState ]
     }]
@@ -68,18 +68,13 @@ let MessageContent = (message, messageType, username) => {
       break;
   }
 
-  return msg;
-};
-
-
-const SlackNotice = (username, channel, iconUrl) => (
-  require("gulp-slack")({
+  return require("gulp-slack")({
     url: process.env.SLACK_WEBHOOK,
     user: username,
-    icon_url: iconUrl,
+    icon_url: msg.iconUrl,
     channel: channel !== undefined ? channel : ''
-  })
-);
+  })(msg.pushData);
+};
 
 // Slack Upload function
 const UploadOptions = (username) => ({
@@ -116,8 +111,13 @@ const GulpSlack = (gulpError, username) => {
       if(isOPTION.upload)
         SlackUpload(process.env.SLACK_API_GULPBOT,UploadOptions(username));
       else if(isOPTION.message) {
-        let Message = MessageContent(gulpError, 'code', username);
-        SlackNotice(username, '', Message.iconUrl)(Message.pushData);
+        // let Message = MessageContent(gulpError, 'code', username);
+        let Message = {
+          message: gulpError,
+          messageType: 'code',
+          username
+        };
+        SlackNotice(username, Message);
       }
     })
     // Log file delete
@@ -139,3 +139,4 @@ const GulpSlack = (gulpError, username) => {
 
 
 exports.GulpSlack = GulpSlack;
+exports.SlackMessage = SlackNotice;
