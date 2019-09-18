@@ -14,74 +14,67 @@ const isOPTION = {
 };
 
 // Slack message setting
-const MessageContent = (gulpError, username) => {
-  let article = {
+const SlackNotice = (username, Message, channel) => {
+  let isCodeMsg = Message.Type === 'code';
+  let ErrorContent = {
+    title: `에러발생 | ${username}`,
+    value: `\`\`\`shell ${Message.content}\`\`\``
+  };
+  let S3uploadState = {
+    title: null,
+    value: Message
+  };
+
+  let msg = {
     iconUrl: process.env.CDN_URL,
-    content: '```shell'+gulpError.message+'```',
-    contentTitle: `에러발생 | ${username}`,
-    messageSidebarColor: ''
+    pushData: [{
+      text: process.env.PROJECT,
+      color: '',
+      fields: [ isCodeMsg ? ErrorContent : S3uploadState ]
+    }]
   };
 
   switch (username) {
-    case 'SassMax':
-      article.iconUrl += 'icons/sass.png';
-      article.messageSidebarColor = '#ec407a';
+    case 'SassMix':
+      msg.iconUrl += 'icons/sass.png';
+      msg.pushData.color = '#ec407a';
       break;
     case 'SassMin':
-      article.iconUrl += 'icons/sass.png';
-      article.messageSidebarColor = '#ec407a';
+      msg.iconUrl += 'icons/sass.png';
+      msg.pushData.color = '#ec407a';
       break;
     case 'Babel':
-      article.iconUrl += 'icons/babel.png';
-      article.messageSidebarColor = '#fdd835';
+      msg.iconUrl += 'icons/babel.png';
+      msg.pushData.color = '#fdd835';
       break;
     case 'Typescript':
-      article.iconUrl += 'icons/typescript.png';
-      article.messageSidebarColor = '#0288d1';
+      msg.iconUrl += 'icons/typescript.png';
+      msg.pushData.color = '#0288d1';
       break;
     case 'S3':
-      article.iconUrl += 'icons/s3.png';
-      article.messageSidebarColor = '#d96735';
+      msg.iconUrl += 'icons/s3.png';
+      msg.pushData.color = '#d96735';
       break;
     case 'Gulp':
-      article.iconUrl += 'icons/gulp.png';
-      article.messageSidebarColor = '#ca514e';
+      msg.iconUrl += 'icons/gulp.png';
+      msg.pushData.color = '#ca514e';
       break;
     case 'Node':
-      article.iconUrl += 'icons/Node.png';
-      article.messageSidebarColor = '#79a270';
+      msg.iconUrl += 'icons/Node.png';
+      msg.pushData.color = '#79a270';
       break;
     default:
-      article.iconUrl = '';
+      msg.iconUrl = '';
       break;
   }
 
-  return article;
-};
-
-
-const SlackNotice = (username, channel, iconUrl) => (
-  require("gulp-slack")({
+  return require("gulp-slack")({
     url: process.env.SLACK_WEBHOOK,
     user: username,
-    icon_url: iconUrl,
+    icon_url: msg.iconUrl,
     channel: channel !== undefined ? channel : ''
-  })
-);
-
-// Slack Webhook message content
-const NoticeContent = (Message) => ([
-  {
-    text: process.env.PROJECT+'\n---',
-    color: Message.messageSidebarColor,
-    fields: [
-      {
-        title: Message.contentTitle,
-        value: Message.content
-      }
-    ]
-  }
-]);
+  })(msg.pushData);
+};
 
 // Slack Upload function
 const UploadOptions = (username) => ({
@@ -118,8 +111,13 @@ const GulpSlack = (gulpError, username) => {
       if(isOPTION.upload)
         SlackUpload(process.env.SLACK_API_GULPBOT,UploadOptions(username));
       else if(isOPTION.message) {
-        let Message = MessageContent(gulpError, username);
-        SlackNotice(username, '', Message.iconUrl)(NoticeContent(Message));
+        // let Message = MessageContent(gulpError, 'code', username);
+        let Message = {
+          content: gulpError.message,
+          Type: 'code',
+          username
+        };
+        SlackNotice(username, Message);
       }
     })
     // Log file delete
@@ -141,3 +139,4 @@ const GulpSlack = (gulpError, username) => {
 
 
 exports.GulpSlack = GulpSlack;
+exports.SlackMessage = SlackNotice;

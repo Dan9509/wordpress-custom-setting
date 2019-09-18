@@ -20,8 +20,8 @@ const SassMix = () => {
     .pipe(sourcemaps.init())
     // slick notice
     .pipe(
-      sass({ outputStyle: "compressed" }).on("error", err => {
-        GulpSlack(err, 'Sass Mix');
+      sass().on("error", err => {
+        GulpSlack(err, 'SassMix');
         this.emit("end");
       })
     )
@@ -48,7 +48,7 @@ const SassSingle = () => {
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
-        GulpSlack(err, 'Sass min');
+        GulpSlack(err, 'SassMin');
         this.emit("end");
       })
     )
@@ -67,7 +67,7 @@ const SassSingle = () => {
 const CrossBrowser = () => {
   let before = gulp
     .src("../public/css/style.min.dev.css")
-    .pipe(postcss([autoPrefix()]))
+    .pipe(postcss([autoPrefix({overrideBrowserslist: ["last 5 versions", "ie >= 10"]})]))
     .pipe(rename("style.min.css"))
     .pipe(gulp.dest("../public/css/"));
 

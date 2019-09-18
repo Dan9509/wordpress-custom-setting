@@ -15,12 +15,11 @@
         - [x] Babel
         - [ ] TypeScript
     - [x] Slack webhook && error log upload toggle
+    - [ ] Auto Prefixer browser list setting!
     - [ ] S3 upload state message FWD slack
     - [ ] gulp plumber for Error handleing
-    - [ ] Auto Prefixer browser list setting!
     
 ## SLACK OPTION 토글기능구현
-
 
 ### ERROR
 
@@ -34,3 +33,12 @@ Babel gulp error 출력문이 유니코드의 컬러값을 포함한 `err.messag
 #### 해결
 
 gulp-babel은 babel의 옵션을 .babelrc에서 적용되지않고 pipeline에서 gulp-babel의 옵션으로 적용해줘야지 babel 옵션이 적용된다.
+
+
+## Auto Prefixer browser list setting!
+
+### Error
+
+공식문서에 나와있는대로 `package.json`에서 브라우저리스트를 구성했다. 그런데 gulp-postcss, autoprefixer에서 불러와서 그런지는 몰라도 `package.json`에서 불러오지 못한다. 저번에 이거하면서 알게된게 `.babelrc`파일도 불러오지 못했다는걸 인지했다. 무슨이유에서 일까?
+
+그래서 공식문서에서는 지양하라는 방법으로 일단 해결했다. 문제가 무엇인지 찾아야 한다.
