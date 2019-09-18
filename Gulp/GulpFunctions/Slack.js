@@ -30,7 +30,7 @@ const SlackNotice = (username, Message, channel) => {
     pushData: [{
       text: process.env.PROJECT,
       color: '',
-      fields: [ isCodeMsg ? ErrorContent : S3uploadState ]
+      fields: isCodeMsg ? [ ErrorContent ] : null
     }]
   };
 
@@ -53,7 +53,7 @@ const SlackNotice = (username, Message, channel) => {
       break;
     case 'S3':
       msg.iconUrl += 'icons/s3.png';
-      msg.pushData[0].text = null;
+      msg.pushData[0].text = S3uploadState.value;
       msg.pushData[0].color = '#d96735';
       break;
     case 'Gulp':
