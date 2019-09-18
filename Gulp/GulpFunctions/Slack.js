@@ -30,38 +30,39 @@ const SlackNotice = (username, Message, channel) => {
     pushData: [{
       text: process.env.PROJECT,
       color: '',
-      fields: [ isCodeMsg ? ErrorContent : S3uploadState ]
+      fields: isCodeMsg ? [ ErrorContent ] : null
     }]
   };
 
   switch (username) {
     case 'SassMix':
       msg.iconUrl += 'icons/sass.png';
-      msg.pushData.color = '#ec407a';
+      msg.pushData[0].color = '#ec407a';
       break;
     case 'SassMin':
       msg.iconUrl += 'icons/sass.png';
-      msg.pushData.color = '#ec407a';
+      msg.pushData[0].color = '#ec407a';
       break;
     case 'Babel':
       msg.iconUrl += 'icons/babel.png';
-      msg.pushData.color = '#fdd835';
+      msg.pushData[0].color = '#fdd835';
       break;
     case 'Typescript':
       msg.iconUrl += 'icons/typescript.png';
-      msg.pushData.color = '#0288d1';
+      msg.pushData[0].color = '#0288d1';
       break;
     case 'S3':
       msg.iconUrl += 'icons/s3.png';
-      msg.pushData.color = '#d96735';
+      msg.pushData[0].text = S3uploadState.value;
+      msg.pushData[0].color = '#d96735';
       break;
     case 'Gulp':
       msg.iconUrl += 'icons/gulp.png';
-      msg.pushData.color = '#ca514e';
+      msg.pushData[0].color = '#ca514e';
       break;
     case 'Node':
       msg.iconUrl += 'icons/Node.png';
-      msg.pushData.color = '#79a270';
+      msg.pushData[0].color = '#79a270';
       break;
     default:
       msg.iconUrl = '';
