@@ -19,7 +19,7 @@ const
 
 
 // watch
-gulp.task("hello", () => {
+gulp.task("default", () => {
 
   // 통합 SCSS 기능
   gulp.watch(
