@@ -1,9 +1,9 @@
-# Workspace Gulp!
+# Play ground Gulp!
 
 ## install
 
 ```shell
-git clone https://github.com/Hansanghyeon/Workplace-Gulp.git
+git clone https://github.com/Hansanghyeon/playground-gulp.git
 ```
 
 1. 프로젝트이름을 알아볼수있는 짧은 이름으로 폴더이름 변경
