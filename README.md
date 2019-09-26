@@ -33,6 +33,14 @@ git clone https://github.com/Hansanghyeon/playground-gulp.git
     SLACK_API_GULPBOT=
     SLACK_CHANNEL=
     ```
+5. 실제작업할 곳 셋팅
+    프로젝트 루트경로에 `.proejct-code` 디렉토리를 복사
+    
+    ```shell
+    cp -r .project-code PROJECT-code
+    ```
+    
+    사용할 `프로젝트 이름-code`로 변경해서 사용한다.
 
 ### 기본셋팅 패키지목록
 
@@ -47,7 +55,7 @@ git clone https://github.com/Hansanghyeon/playground-gulp.git
 
 Folder 설명
 
-#### code
+#### .proejct-code
 
 실제로 작업하는 곳 scss, js, ts ...
 
