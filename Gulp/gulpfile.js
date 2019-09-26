@@ -18,7 +18,7 @@ const
 // --------------- 구분선 ---------------
 
 
-const project = process.env.PROJECT
+const project = process.env.PROJECT;
 // watch
 gulp.task("default", () => {
 
@@ -35,8 +35,8 @@ gulp.task("default", () => {
   );
 
   // Babel!!
-  gulp.watch(`../${project}-code/Vanilla/*.js`, gulp.series(Babel));
+  gulp.watch(`../${project}-code/Javascript/*.js`, gulp.series(Babel));
 
   // TypeScript!!
-  gulp.watch(`../${project}-code/TypeScript/*.ts`, gulp.series(TypeScript));
+  gulp.watch(`../${project}-code/Typescript/*.ts`, gulp.series(TypeScript));
 });
