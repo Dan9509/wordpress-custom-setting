@@ -14,7 +14,7 @@ const
 // Babel
 const BabelBase = () => {
   let before = gulp
-    .src("../code/Vanilla/*.js")
+    .src(`../${process.env.PROJECT}-code/Javascript/*.js`)
     .pipe(sourcemaps.init())
     .pipe(
       Babel({
@@ -41,7 +41,7 @@ const BabelBase = () => {
 // TypeScript
 const TypeScriptBase = () => {
   let before = gulp
-    .src("../code/TypeScript/*.ts")
+    .src(`../${process.env.PROJECT}-code/Typescript/*.ts`)
     .pipe(sourcemaps.init())
     .pipe(
       TypeScript().on("error", err => {
