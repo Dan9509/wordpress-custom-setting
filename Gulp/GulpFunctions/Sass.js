@@ -15,7 +15,7 @@ const
 // 통합 scss
 const SassMix = () => {
   let before = gulp
-    .src("../code/Scss/mix/style.min.scss")
+    .src(`../${process.env.PROJECT}-code/Scss/mix/style.min.scss`)
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
@@ -42,7 +42,7 @@ const SassMix = () => {
 // 분리형 scss
 const SassSingle = () => {
   let before = gulp
-    .src("../code/Scss/single/*.scss")
+    .src(`../${process.env.PROJECT}-code/Scss/single/*.scss`)
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
