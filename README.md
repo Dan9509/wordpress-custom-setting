@@ -11,27 +11,42 @@ git clone https://github.com/Hansanghyeon/playground-gulp.git
 3. `sudo npm i`
 4. .env 셋팅
     ```env
-    # PROEJCT 정보
+   # PROEJCT 정보
     PROJECT=프로젝트명
-    OPTION_S3=boolean
-    OPTION_SLACK_MESSAGE=boolean
-    OPTION_SLACK_UPLOAD=boolean
     
-    # AWS S3
+    # OPTION(*)
+    # webpack
+    # S3 upload
+    # Slack
+    OPTION_WEBPACK=boolean
+    OPTION_S3=boolean
+    OPTION_SLACK=boolean
+      ## Sate notice
+      AWS_S3_STATE_FOR_SLACK=boolean
+    
+    # Skill Stack
+    ## OPTION_WEBPACK = true ? 'javascript, typescript' : null
+    STACK_SCRIPT_TYPE=javascript
+    
+    # OPTION_S3 = true ? data fill : Skip
+    ## AWS S3
     AWS_S3_BUCKET_NAME=
     AWS_S3_BUCKET_ACCESSKEYID=
     AWS_S3_BUCKET_SECRETACCESSKEY=
-    # AWS_S3_URL/프로젝트명/output
-    AWS_S3_URL=해당버킷 접근 루트 URL
+    AWS_S3_URL=
     
-    # Slack
+    # OPTION_SLACK = true ? data fill : Skip
+    ## NOTIOCE
+    SLACK_MESSAGE=boolean
+    SLACK_UPLOAD=boolean
+      # SLACK_MESSAGE = true || SLACK_UPLOAD = true ? data fill : Skip
+      SLACK_API_GULPBOT=
+      SLACK_WEBHOOK=
+      #webhook push channel
+      SLACK_CHANNEL=
+    
     # CDN_URL 웹훅 유저 프로필 아이콘제공
     CDN_URL=https://cdn.4log.dev/
-    SLACK_WEBHOOK=
-    # error log file upload bot!
-    # upload channel
-    SLACK_API_GULPBOT=
-    SLACK_CHANNEL=
     ```
 5. 실제작업할 곳 셋팅
     프로젝트 루트경로에 `.proejct-code` 디렉토리를 복사
@@ -50,6 +65,7 @@ git clone https://github.com/Hansanghyeon/playground-gulp.git
 - TypeScript
 - Slack
 - AWS S3
+- Webpack
 
 ---
 

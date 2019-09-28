@@ -25,7 +25,7 @@ const publisher = awsPublish.create(
   // }
 );
 
-const S3Upload = (inputStream, filename, slackPush) => {
+const S3Upload = (inputStream, filename) => {
   // upload info
   let headers = { "Cache-Control": "max-age=315360000, no-transform, public" };
 
@@ -39,7 +39,7 @@ const S3Upload = (inputStream, filename, slackPush) => {
       )
       .pipe(publisher.publish(headers))
       // .pipe(s3.publisher.cache())
-      .pipe(report(slackPush))
+      .pipe(report())
   );
 };
 
