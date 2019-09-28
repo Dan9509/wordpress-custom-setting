@@ -64,6 +64,10 @@ const SlackNotice = (username, Message, channel) => {
       msg.iconUrl += 'icons/Node.png';
       msg.pushData[0].color = '#79a270';
       break;
+    case 'Webpack':
+      msg.iconUrl += 'icons/webpack.png';
+      msg.pushData[0].color = '#3874b5';
+      break;
     default:
       msg.iconUrl = '';
       break;
