@@ -9,8 +9,8 @@ const
 // --------------- 구분선 ---------------
 
 const isOPTION = {
-  message: process.env.OPTION_SLACK_MESSAGE === 'true',
-  upload: process.env.OPTION_SLACK_UPLOAD === 'true'
+  message: process.env.SLACK_MESSAGE === 'true',
+  upload: process.env.SLACK_UPLOAD === 'true'
 };
 
 // Slack message setting
@@ -61,8 +61,12 @@ const SlackNotice = (username, Message, channel) => {
       msg.pushData[0].color = '#ca514e';
       break;
     case 'Node':
-      msg.iconUrl += 'icons/Node.png';
+      msg.iconUrl += 'icons/node.png';
       msg.pushData[0].color = '#79a270';
+      break;
+    case 'Webpack':
+      msg.iconUrl += 'icons/webpack.png';
+      msg.pushData[0].color = '#3874b5';
       break;
     default:
       msg.iconUrl = '';
