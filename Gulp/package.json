@@ -42,5 +42,8 @@
   "browserslist": [
     "last 5 versions",
     "ie >= 10"
-  ]
+  ],
+  "devDependencies": {
+    "webpack-stream": "^5.2.1"
+  }
 }

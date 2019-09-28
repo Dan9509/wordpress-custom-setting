@@ -1,4 +1,3 @@
-require('dotenv').config();
 const
   awsPublish = require("gulp-awspublish"),
   rename = require("gulp-rename"),

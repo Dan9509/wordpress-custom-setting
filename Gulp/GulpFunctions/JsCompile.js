@@ -4,6 +4,7 @@ const
   Babel = require("gulp-babel"),
   concat = require("gulp-concat"),
   TypeScript = require("gulp-typescript"),
+  webpack = require("webpack-stream"),
   S3Upload = require('./S3Upload').S3Upload,
   GulpSlack = require('./Slack').GulpSlack;
 
@@ -59,9 +60,31 @@ const TypeScriptBase = () => {
   }
 };
 
+// WebPack
+const WebpackBase = () => {
+  let before = gulp
+    .src(`../${process.env.PROJECT}-code/**/index.*`)
+    .pipe(
+      webpack({config: require('../webpack.config')}, null, err => {
+        if(err !== null) {
+          GulpSlack(err, 'Webpack');
+          this.emit("end");
+        }
+      })
+    )
+    .pipe(gulp.dest("../public/js/"));
+
+  if (process.env.OPTION_S3 !== 'false') {
+    return S3Upload(before, "js");
+  } else {
+    return before;
+  }
+};
+
 
 // --------------- 구분선 ---------------
 
 
 exports.Babel = BabelBase;
 exports.TypeScript = TypeScriptBase;
+exports.Webpack = WebpackBase;
