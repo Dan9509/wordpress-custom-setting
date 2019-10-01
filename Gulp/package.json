@@ -44,6 +44,7 @@
     "ie >= 10"
   ],
   "devDependencies": {
+    "babel-loader": "^8.0.6",
     "webpack-stream": "^5.2.1"
   }
 }

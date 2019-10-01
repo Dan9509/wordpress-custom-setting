@@ -9,18 +9,20 @@ module.exports = {
   output: {
     filename: 'build.js'
   },
-  // module > rules 로더등록
-  // modules: {
-  //   rules: [
-  //     {
-  //       test: /\.css$/,
-  //       user: [
-  //         'style-loader',
-  //         'css-loader'
-  //       ]
-  //     }
-  //   ]
-  // },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules)/,
+        loader: 'babel-loader',
+        query: {
+          presets: [
+            '@babel/preset-env'
+          ],
+        },
+      },
+    ],
+  },
   // plugins: [
   //
   // ]
