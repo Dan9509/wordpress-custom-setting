@@ -5,23 +5,26 @@ const
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
   rename = require("gulp-rename"),
-  S3Upload = require('./S3Upload').S3Upload,
   GulpSlack = require('./Slack').GulpSlack;
 
+if(process.env.OPTION_S3 === 'true')
+  S3Upload = require('./S3Upload').S3Upload;
 
 // --------------- 구분선 ---------------
 
+const PROJECT = process.env.PROJECT;
 
 // 통합 scss
 const SassMix = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/Scss/mix/style.min.scss`)
+    .src(`../${PROJECT}-code/Scss/mix/style.min.scss`)
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
         GulpSlack(err, 'SassMix');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
@@ -30,7 +33,7 @@ const SassMix = () => {
     // 소스맵할당 개발용 min파일
     .pipe(rename("style.min.dev.css"))
     // output
-    .pipe(gulp.dest("../public/css/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
@@ -49,13 +52,14 @@ const SassSingle = () => {
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
         GulpSlack(err, 'SassMin');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
     // source map 경로 css 마지막 추가
     .pipe(sourcemaps.write())
     // output
-    .pipe(gulp.dest("../public/css/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");

@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Dan9509/wp_develop_space#readme",
   "dependencies": {
     "@babel/core": "^7.6.0",
+    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.4.2",
     "autoprefixer": "^9.6.0",
     "dotenv": "^8.1.0",
