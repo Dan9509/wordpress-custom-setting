@@ -22,6 +22,7 @@ const SassMix = () => {
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
         GulpSlack(err, 'SassMix');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
@@ -49,6 +50,7 @@ const SassSingle = () => {
     .pipe(
       sass({ outputStyle: "compressed" }).on("error", err => {
         GulpSlack(err, 'SassMin');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
