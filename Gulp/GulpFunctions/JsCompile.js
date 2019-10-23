@@ -31,7 +31,7 @@ const BabelBase = () => {
     )
     .pipe(concat("index.js"))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest("../public/js/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
@@ -53,7 +53,7 @@ const TypeScriptBase = () => {
       })
     )
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest("../public/js/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
@@ -75,7 +75,7 @@ const WebpackBase = () => {
         }
       })
     )
-    .pipe(gulp.dest("../public/js/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");

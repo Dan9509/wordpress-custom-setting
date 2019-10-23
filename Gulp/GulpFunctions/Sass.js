@@ -11,11 +11,12 @@ const
 
 // --------------- 구분선 ---------------
 
+const PROJECT = process.env.PROJECT;
 
 // 통합 scss
 const SassMix = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/Scss/mix/style.min.scss`)
+    .src(`../${PROJECT}-code/Scss/mix/style.min.scss`)
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice
@@ -31,7 +32,7 @@ const SassMix = () => {
     // 소스맵할당 개발용 min파일
     .pipe(rename("style.min.dev.css"))
     // output
-    .pipe(gulp.dest("../public/css/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
@@ -57,7 +58,7 @@ const SassSingle = () => {
     // source map 경로 css 마지막 추가
     .pipe(sourcemaps.write())
     // output
-    .pipe(gulp.dest("../public/css/"));
+    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
