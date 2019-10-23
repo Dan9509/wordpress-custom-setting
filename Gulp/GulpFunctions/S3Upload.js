@@ -6,23 +6,23 @@ const
 
 // --------------- 구분선 ---------------
 
-
-const publisher = awsPublish.create(
-  {
-    // 해당지역코드 서울 : 'ap-northeast-2'
-    region: "ap-northeast-2",
-    params: {
-      Bucket: process.env.AWS_S3_BUCKET_NAME
-    },
-    accessKeyId: process.env.AWS_S3_BUCKET_ACCESSKEYID,
-    secretAccessKey: process.env.AWS_S3_BUCKET_SECRETACCESSKEY
-  }
-  // TODO: 알아봐야하는 옵션
-  // 정확하게 몰라서 적용하지 않음
-  // {
-  //     cacheFileName: "your-cache-location"
-  // }
-);
+if(process.env.OPTION_S3 === 'true')
+  const publisher = awsPublish.create(
+    {
+      // 해당지역코드 서울 : 'ap-northeast-2'
+      region: "ap-northeast-2",
+      params: {
+        Bucket: process.env.AWS_S3_BUCKET_NAME
+      },
+      accessKeyId: process.env.AWS_S3_BUCKET_ACCESSKEYID,
+      secretAccessKey: process.env.AWS_S3_BUCKET_SECRETACCESSKEY
+    }
+    // TODO: 알아봐야하는 옵션
+    // 정확하게 몰라서 적용하지 않음
+    // {
+    //     cacheFileName: "your-cache-location"
+    // }
+  );
 
 const S3Upload = (inputStream, filename) => {
   // upload info
