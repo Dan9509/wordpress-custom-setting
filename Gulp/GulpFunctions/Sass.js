@@ -5,9 +5,10 @@ const
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
   rename = require("gulp-rename"),
-  S3Upload = require('./S3Upload').S3Upload,
   GulpSlack = require('./Slack').GulpSlack;
 
+if(process.env.OPTION_S3 === 'true')
+  S3Upload = require('./S3Upload').S3Upload;
 
 // --------------- 구분선 ---------------
 
