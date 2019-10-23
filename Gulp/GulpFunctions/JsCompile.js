@@ -25,6 +25,7 @@ const BabelBase = () => {
       }).on("error", err => {
         console.log(err.message);
         GulpSlack(err, 'Babel');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
@@ -47,6 +48,7 @@ const TypeScriptBase = () => {
     .pipe(
       TypeScript().on("error", err => {
         GulpSlack(err, 'Typescript');
+        if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
         this.emit("end");
       })
     )
@@ -68,6 +70,7 @@ const WebpackBase = () => {
       webpack({config: require('../webpack.config')}, null, err => {
         if(err !== null) {
           GulpSlack(err, 'Webpack');
+          if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
           this.emit("end");
         }
       })
