@@ -5,6 +5,7 @@ const
   concat = require("gulp-concat"),
   TypeScript = require("gulp-typescript"),
   webpack = require("webpack-stream"),
+  path = require("path"),
   GulpSlack = require('./Slack').GulpSlack;
 
 if(process.env.OPTION_S3 === 'true')
@@ -12,6 +13,8 @@ if(process.env.OPTION_S3 === 'true')
 
 // --------------- 구분선 ---------------
 
+const PROJECT = process.env.PROJECT;
+const dir = path.join(__dirname, '..', '..', `${PROJECT}-code`, 'public', 'js', '/');
 
 // Babel
 const BabelBase = () => {
@@ -32,7 +35,7 @@ const BabelBase = () => {
     )
     .pipe(concat("index.js"))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
@@ -54,7 +57,7 @@ const TypeScriptBase = () => {
       })
     )
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
@@ -66,7 +69,7 @@ const TypeScriptBase = () => {
 // WebPack
 const WebpackBase = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/**/index.*`)
+    .src(`../${process.env.PROJECT}-code/${process.env.STACK_SCRIPT_TYPE === 'javascript' ? 'Javascript' : 'TypeScript'}/index.*`)
     .pipe(
       webpack({config: require('../webpack.config')}, null, err => {
         if(err !== null) {
@@ -76,7 +79,7 @@ const WebpackBase = () => {
         }
       })
     )
-    .pipe(gulp.dest(`../${PROJECT}-code/public/js/`));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "js");
