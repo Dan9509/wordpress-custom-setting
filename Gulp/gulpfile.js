@@ -36,7 +36,7 @@ gulp.task("default", () => {
 
   const isWebpack = process.env.OPTION_WEBPACK;
   const funcWebpack = () => {
-    gulp.watch(`../${process.env.PROJECT}-code/**/*.js`, gulp.series(Webpack));
+    gulp.watch(`../${process.env.PROJECT}-code/${process.env.STACK_SCRIPT_TYPE === 'javascript' ? 'Javascript' : 'TypeScript'}/*.js`, gulp.series(Webpack));
   };
   const funcJsCompile = () => {
     // Babel!!

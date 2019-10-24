@@ -5,6 +5,7 @@ const
   autoPrefix = require("autoprefixer"),
   postcss = require("gulp-postcss"),
   rename = require("gulp-rename"),
+  path = require("path"),
   GulpSlack = require('./Slack').GulpSlack;
 
 if(process.env.OPTION_S3 === 'true')
@@ -13,6 +14,7 @@ if(process.env.OPTION_S3 === 'true')
 // --------------- 구분선 ---------------
 
 const PROJECT = process.env.PROJECT;
+const dir = path.join(__dirname, '..', '..', `${PROJECT}-code`, 'public', 'css', '/');
 
 // 통합 scss
 const SassMix = () => {
@@ -33,7 +35,7 @@ const SassMix = () => {
     // 소스맵할당 개발용 min파일
     .pipe(rename("style.min.dev.css"))
     // output
-    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
@@ -59,7 +61,7 @@ const SassSingle = () => {
     // source map 경로 css 마지막 추가
     .pipe(sourcemaps.write())
     // output
-    .pipe(gulp.dest(`../${PROJECT}-code/public/css/`));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css");
@@ -70,10 +72,10 @@ const SassSingle = () => {
 
 const CrossBrowser = () => {
   let before = gulp
-    .src("../public/css/style.min.dev.css")
+    .src(`../${process.env.PROJECT}-code/public/css/style.min.dev.css`)
     .pipe(postcss([autoPrefix({overrideBrowserslist: ["last 5 versions", "ie >= 10"]})]))
     .pipe(rename("style.min.css"))
-    .pipe(gulp.dest("../public/css/"));
+    .pipe(gulp.dest(dir));
 
   if (process.env.OPTION_S3 !== 'false') {
     return S3Upload(before, "css", 'slackNoPush');
