@@ -19,7 +19,7 @@ const dir = path.join(__dirname, '..', '..', `${PROJECT}-code`, 'public', 'js', 
 // Babel
 const BabelBase = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/Javascript/*.js`)
+    .src(`../../${process.env.PROJECT}-code/Javascript/*.js`)
     .pipe(sourcemaps.init())
     .pipe(
       Babel({
@@ -47,7 +47,7 @@ const BabelBase = () => {
 // TypeScript
 const TypeScriptBase = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/Typescript/*.ts`)
+    .src(`../../${process.env.PROJECT}-code/Typescript/*.ts`)
     .pipe(sourcemaps.init())
     .pipe(
       TypeScript().on("error", err => {
@@ -69,9 +69,9 @@ const TypeScriptBase = () => {
 // WebPack
 const WebpackBase = () => {
   let before = gulp
-    .src(`../${process.env.PROJECT}-code/${process.env.STACK_SCRIPT_TYPE === 'javascript' ? 'Javascript' : 'TypeScript'}/index.*`)
+    .src(`../../${process.env.PROJECT}-code/${process.env.STACK_SCRIPT_TYPE === 'javascript' ? 'Javascript' : 'TypeScript'}/index.*`)
     .pipe(
-      webpack({config: require('../webpack.config')}, null, err => {
+      webpack(require('../webpack.config'), null, (err, stats) => {
         if(err !== null) {
           GulpSlack(err, 'Webpack');
           if(process.env.OPTION_SLACK === 'false') console.log(err.message.toString());
