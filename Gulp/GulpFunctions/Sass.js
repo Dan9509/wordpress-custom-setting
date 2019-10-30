@@ -19,7 +19,7 @@ const dir = path.join(__dirname, '..', '..', `${PROJECT}-code`, 'public', 'css',
 // 통합 scss
 const SassMix = () => {
   let before = gulp
-    .src(`../${PROJECT}-code/Scss/mix/style.min.scss`)
+    .src(`../../${PROJECT}-code/Scss/mix/style.min.scss`)
     // 해당파일 소스맵생성
     .pipe(sourcemaps.init())
     // slick notice

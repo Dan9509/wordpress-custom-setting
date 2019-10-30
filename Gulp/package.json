@@ -18,9 +18,9 @@
   "homepage": "https://github.com/Dan9509/wp_develop_space#readme",
   "dependencies": {
     "@babel/core": "^7.6.0",
-    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.4.2",
     "autoprefixer": "^9.6.0",
+    "babel-polyfill": "^6.26.0",
     "dotenv": "^8.1.0",
     "gulp": "^4.0.2",
     "gulp-awspublish": "^4.0.0",
@@ -38,7 +38,8 @@
     "node-pre-gyp": "^0.13.0",
     "node-slack-upload": "^2.0.0",
     "postcss-cli": "^6.1.2",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "whatwg-fetch": "^3.0.0"
   },
   "browserslist": [
     "last 5 versions",
