@@ -7,7 +7,7 @@ const
 // --------------- 구분선 ---------------
 
 if(process.env.OPTION_S3 === 'true')
-  const publisher = awsPublish.create(
+  var publisher = awsPublish.create(
     {
       // 해당지역코드 서울 : 'ap-northeast-2'
       region: "ap-northeast-2",
