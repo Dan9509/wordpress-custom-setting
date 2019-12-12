@@ -6,7 +6,7 @@ module.exports = {
   // entry 입력파일 경로
   entry: {
     main: `../${project}-code/${scriptType === 'javascript' ? 'Javascript/index.js' : 'Typescript/index.ts'}`,
-    polyfills: `../${project}-code/${scriptType === 'javascript' ? 'Javascript/polyfills.js' : 'Typescript/index.ts'}`
+    polyfills: ['@babel/polyfill',`../${project}-code/${scriptType === 'javascript' ? 'Javascript/polyfills.js' : 'Typescript/index.ts'}`]
   },
   // output 출력 디렉토리와 파일이름
   output: {
